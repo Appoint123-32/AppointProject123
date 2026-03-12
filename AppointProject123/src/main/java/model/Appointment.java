@@ -10,6 +10,7 @@ public class Appointment {
     private int participants;
     private String type;
     private String status;
+    private String bookedBy;
 
     public Appointment(int id, LocalDateTime dateTime, int duration, int participants, String type) {
         this.id = id;
@@ -17,7 +18,8 @@ public class Appointment {
         this.duration = duration;
         this.participants = participants;
         this.type = type;
-        this.status = "CONFIRMED";
+        this.status = "AVAILABLE";
+        this.bookedBy = null;
     }
 
     public int getId() {
@@ -44,7 +46,17 @@ public class Appointment {
         return status;
     }
 
+    public String getBookedBy() {
+        return bookedBy;
+    }
+
+    public void book(String username) {
+        this.status = "BOOKED";
+        this.bookedBy = username;
+    }
+
     public void cancel() {
-        status = "CANCELLED";
+        this.status = "AVAILABLE";
+        this.bookedBy = null;
     }
 }

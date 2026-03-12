@@ -32,4 +32,17 @@ public class AppointmentRepository {
     public void removeAppointment(Appointment appointment) {
         appointments.remove(appointment);
     }
+    
+    public List<Appointment> getAvailableAppointments() {
+
+        List<Appointment> available = new ArrayList<>();
+
+        for (Appointment a : appointments) {
+            if (a.getStatus().equals("AVAILABLE")) {
+                available.add(a);
+            }
+        }
+
+        return available;
+    }
 }

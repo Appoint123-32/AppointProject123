@@ -1,69 +1,160 @@
 package ui;
 
-import service.BookingService;
-import repository.AppointmentRepository;
-import model.Appointment;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
+
+import model.Appointment;
+import repository.AppointmentRepository;
+import service.AuthenticationService;
+import service.BookingService;
 
 public class main {
 
     public static void main(String[] args) {
 
         AppointmentRepository repository = new AppointmentRepository();
-        BookingService service = new BookingService(repository);
+        BookingService bookingService = new BookingService(repository);
+        AuthenticationService authService = new AuthenticationService();
 
         Scanner scanner = new Scanner(System.in);
+        String currentUsername = "";
 
         while (true) {
 
-            System.out.println("\n===== Appointment System =====");
-            System.out.println("1. Book Appointment");
-            System.out.println("2. View Appointments");
-            System.out.println("3. Cancel Appointment");
-            System.out.println("4. Exit");
-            System.out.print("Choose option: ");
+            if (!authService.isLoggedIn()) {
+                System.out.println("\n===== Login =====");
+                System.out.print("Enter username: ");
+                String username = scanner.next();
 
-            int choice = scanner.nextInt();
+                System.out.print("Enter password: ");
+                String password = scanner.next();
 
-            switch (choice) {
+                if (authService.login(username, password)) {
+                    currentUsername = username;
+                    System.out.println("Login successful!");
+                } else {
+                    System.out.println("Invalid username or password.");
+                }
 
-                case 1:
+                continue;
+            }
 
-                    System.out.print("Enter ID: ");
-                    int id = scanner.nextInt();
+            if (currentUsername.equals("admin")) {
 
-                    service.bookAppointment(id, LocalDateTime.now(), 30, 1, "virtual");
-                    break;
+                System.out.println("\n===== Admin Menu =====");
+                System.out.println("1. Add Appointment Slot");
+                System.out.println("2. View All Appointments");
+                System.out.println("3. Logout");
+                System.out.println("4. Exit");
+                System.out.print("Choose option: ");
 
-                case 2:
+                int choice = scanner.nextInt();
 
-                    List<Appointment> list = service.getAllAppointments();
+                switch (choice) {
 
-                    for (Appointment a : list) {
-                        System.out.println("ID: " + a.getId() + " | Type: " + a.getType() + " | Status: " + a.getStatus());
-                    }
+                    case 1:
+                        System.out.print("Enter slot ID: ");
+                        int id = scanner.nextInt();
 
-                    break;
+                        System.out.print("Enter duration in minutes: ");
+                        int duration = scanner.nextInt();
 
-                case 3:
+                        System.out.print("Enter number of participants: ");
+                        int participants = scanner.nextInt();
 
-                    System.out.print("Enter appointment ID to cancel: ");
-                    int cancelId = scanner.nextInt();
+                        System.out.print("Enter appointment type: ");
+                        String type = scanner.next();
 
-                    service.cancelAppointment(cancelId);
-                    break;
+                        bookingService.adminAddSlot(id, LocalDateTime.now(), duration, participants, type);
+                        break;
 
-                case 4:
+                    case 2:
+                        List<Appointment> allAppointments = bookingService.getAllAppointments();
 
-                    System.out.println("Exiting system...");
-                    scanner.close();
-                    return;
+                        if (allAppointments.isEmpty()) {
+                            System.out.println("No appointments found.");
+                        } else {
+                            for (Appointment a : allAppointments) {
+                                System.out.println("ID: " + a.getId()
+                                        + " | Type: " + a.getType()
+                                        + " | Status: " + a.getStatus()
+                                        + " | Booked By: " + a.getBookedBy());
+                            }
+                        }
+                        break;
 
-                default:
-                    System.out.println("Invalid choice.");
+                    case 3:
+                        authService.logout();
+                        currentUsername = "";
+                        break;
+
+                    case 4:
+                        System.out.println("Exiting system...");
+                        scanner.close();
+                        return;
+
+                    default:
+                        System.out.println("Invalid choice.");
+                }
+
+            } else {
+
+                System.out.println("\n===== User Menu =====");
+                System.out.println("1. View Available Slots");
+                System.out.println("2. Book Appointment");
+                System.out.println("3. Cancel Appointment");
+                System.out.println("4. Logout");
+                System.out.println("5. Exit");
+                System.out.print("Choose option: ");
+
+                int choice = scanner.nextInt();
+
+                switch (choice) {
+
+                    case 1:
+                        List<Appointment> availableAppointments = bookingService.viewAvailableSlots();
+
+                        if (availableAppointments.isEmpty()) {
+                            System.out.println("No available slots.");
+                        } else {
+                            for (Appointment a : availableAppointments) {
+                                System.out.println("ID: " + a.getId()
+                                        + " | Type: " + a.getType()
+                                        + " | Status: " + a.getStatus()
+                                        + " | Duration: " + a.getDuration()
+                                        + " | Participants: " + a.getParticipants());
+                            }
+                        }
+                        break;
+
+                    case 2:
+                        System.out.print("Enter slot ID to book: ");
+                        int bookId = scanner.nextInt();
+
+                        bookingService.bookSlot(bookId, currentUsername);
+                        break;
+
+                    case 3:
+                        System.out.print("Enter appointment ID to cancel: ");
+                        int cancelId = scanner.nextInt();
+
+                        bookingService.cancelAppointment(cancelId);
+                        break;
+
+                    case 4:
+                        authService.logout();
+                        currentUsername = "";
+                        break;
+
+                    case 5:
+                        System.out.println("Exiting system...");
+                        scanner.close();
+                        return;
+
+                    default:
+                        System.out.println("Invalid choice.");
+                }
             }
         }
     }
