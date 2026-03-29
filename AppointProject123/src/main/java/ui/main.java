@@ -42,12 +42,14 @@ public class main {
 
             if (currentUsername.equals("admin")) {
 
-                System.out.println("\n===== Admin Menu =====");
-                System.out.println("1. Add Appointment Slot");
-                System.out.println("2. View All Appointments");
-                System.out.println("3. Logout");
-                System.out.println("4. Exit");
-                System.out.print("Choose option: ");
+            	System.out.println("\n===== Admin Menu =====");
+            	System.out.println("1. Add Appointment Slot");
+            	System.out.println("2. View All Appointments");
+            	System.out.println("3. Modify Appointment");
+            	System.out.println("4. Delete Appointment");
+            	System.out.println("5. Logout");
+            	System.out.println("6. Exit");
+            	System.out.print("Choose option: ");
 
                 int choice = scanner.nextInt();
 
@@ -79,20 +81,44 @@ public class main {
                                 System.out.println("ID: " + a.getId()
                                         + " | Type: " + a.getType()
                                         + " | Status: " + a.getStatus()
-                                        + " | Booked By: " + a.getBookedBy());
+                                        + " | Booked By: " + a.getBookedUsers());
                             }
                         }
                         break;
 
                     case 3:
+                        System.out.print("Enter appointment ID to modify: ");
+                        int modId = scanner.nextInt();
+
+                        System.out.print("Enter new duration: ");
+                        int newDuration = scanner.nextInt();
+
+                        System.out.print("Enter new participants: ");
+                        int newParticipants = scanner.nextInt();
+
+                        System.out.print("Enter new type: ");
+                        String newType = scanner.next();
+
+                        bookingService.adminModifyAppointment(modId, newDuration, newParticipants, newType);
+                        break;
+
+                    case 4:
+                        System.out.print("Enter appointment ID to delete: ");
+                        int delId = scanner.nextInt();
+
+                        bookingService.adminCancelAppointment(delId);
+                        break;
+
+                    case 5:
                         authService.logout();
                         currentUsername = "";
                         break;
 
-                    case 4:
+                    case 6:
                         System.out.println("Exiting system...");
                         scanner.close();
                         return;
+
 
                     default:
                         System.out.println("Invalid choice.");

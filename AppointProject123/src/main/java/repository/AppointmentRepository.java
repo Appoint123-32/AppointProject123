@@ -38,7 +38,8 @@ public class AppointmentRepository {
         List<Appointment> available = new ArrayList<>();
 
         for (Appointment a : appointments) {
-            if (a.getStatus().equals("AVAILABLE")) {
+
+            if (a.getBookedUsers().size() < a.getParticipants()) {
                 available.add(a);
             }
         }

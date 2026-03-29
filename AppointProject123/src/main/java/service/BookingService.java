@@ -1,79 +1,127 @@
 package service;
-import observer.Observer;
-import observer.EmailNotificationService;
+
 import model.Appointment;
 import repository.AppointmentRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookingService {
-	private Observer notification = new EmailNotificationService();
+
     private AppointmentRepository repository;
 
     public BookingService(AppointmentRepository repository) {
         this.repository = repository;
     }
 
-    // book appointment
-    public void bookAppointment(int id, LocalDateTime time, int duration, int participants, String type) {
+    // 👨‍💼 Admin adds slot
+    public void adminAddSlot(int id, LocalDateTime dateTime, int duration, int participants, String type) {
 
-        Appointment appointment = new Appointment(id, time, duration, participants, type);
+        Appointment appointment = new Appointment(id, dateTime, duration, participants, type);
         repository.addAppointment(appointment);
 
-        System.out.println("Appointment booked successfully.");
-        notification.update("Your appointment has been booked successfully.");
+        System.out.println("✅ Appointment slot added successfully!");
     }
 
-    // view appointments
+    // 📋 Get all appointments
     public List<Appointment> getAllAppointments() {
         return repository.getAllAppointments();
     }
 
-    // cancel appointment
-    public void cancelAppointment(int id) {
-
-        Appointment appointment = repository.findById(id);
-
-        if (appointment != null) {
-            appointment.cancel();
-            System.out.println("Appointment cancelled.");
-            notification.update("Your appointment has been cancelled.");
-        } else {
-            System.out.println("Appointment not found.");
-        }
-    }
-    
-    public void adminAddSlot(int id, LocalDateTime time, int duration, int participants, String type) {
-
-        Appointment appointment = new Appointment(id, time, duration, participants, type);
-        repository.addAppointment(appointment);
-
-        System.out.println("Slot added by admin.");
-        notification.update("A new appointment slot has been added successfully.");
-    }
-    
-    
+    // 👀 Available slots
     public List<Appointment> viewAvailableSlots() {
-        return repository.getAvailableAppointments();
+
+        List<Appointment> available = new ArrayList<>();
+
+        for (Appointment a : repository.getAllAppointments()) {
+            if (a.getBookedUsers().size() < a.getParticipants()) {
+                available.add(a);
+            }
+        }
+
+        return available;
     }
-    
+
+    // 🔥 BOOK SLOT
     public void bookSlot(int id, String username) {
 
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-            System.out.println("Slot not found.");
+            System.out.println("❌ Appointment not found.");
             return;
         }
 
-        if (!appointment.getStatus().equals("AVAILABLE")) {
-            System.out.println("Slot already booked.");
+        if (appointment.getBookedUsers().size() >= appointment.getParticipants()) {
+            System.out.println("❌ No available slots (appointment is full).");
             return;
         }
 
-        appointment.book(username);
+        if (appointment.getBookedUsers().contains(username)) {
+            System.out.println("❌ You already booked this appointment.");
+            return;
+        }
 
-        System.out.println("Appointment booked successfully.");
+        appointment.getBookedUsers().add(username);
+
+        if (appointment.getBookedUsers().size() == appointment.getParticipants()) {
+            appointment.setStatus("FULL");
+        }
+
+        System.out.println("✅ Appointment booked successfully!");
+    }
+
+    // ❌ Cancel booking (user side)
+    public void cancelAppointment(int id) {
+
+        Appointment appointment = repository.findById(id);
+
+        if (appointment == null) {
+            System.out.println("❌ Appointment not found.");
+            return;
+        }
+
+        if (appointment.getBookedUsers().isEmpty()) {
+            System.out.println("❌ No bookings to cancel.");
+            return;
+        }
+
+        appointment.getBookedUsers().remove(appointment.getBookedUsers().size() - 1);
+        appointment.setStatus("AVAILABLE");
+
+        System.out.println("✅ Appointment cancelled.");
+    }
+
+    // 🔥 ADMIN MODIFY
+    public void adminModifyAppointment(int id, int newDuration, int newParticipants, String newType) {
+
+        Appointment appointment = repository.findById(id);
+
+        if (appointment == null) {
+            System.out.println("❌ Appointment not found.");
+            return;
+        }
+
+        appointment.setDuration(newDuration);
+        appointment.setParticipants(newParticipants);
+        appointment.setType(newType);
+
+        System.out.println("✅ Appointment updated successfully!");
+    }
+
+    // 🔥 ADMIN DELETE
+    public void adminCancelAppointment(int id) {
+
+        Appointment appointment = repository.findById(id);
+
+        if (appointment == null) {
+            System.out.println("❌ Appointment not found.");
+            return;
+        }
+
+        repository.removeAppointment(appointment);
+
+        System.out.println("✅ Appointment deleted by admin.");
     }
 }
