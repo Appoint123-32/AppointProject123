@@ -1,6 +1,9 @@
 package ui;
 
 import java.time.LocalDateTime;
+import model.AppointmentCategory;
+import model.AppointmentFormat;
+import model.AppointmentMode;
 import java.util.List;
 import java.util.Scanner;
 
@@ -55,9 +58,15 @@ public class main {
 
                 switch (choice) {
 
+                   
                     case 1:
                         System.out.print("Enter slot ID: ");
                         int id = scanner.nextInt();
+
+                        scanner.nextLine();
+
+                        System.out.print("Enter title: ");
+                        String title = scanner.nextLine();
 
                         System.out.print("Enter duration in minutes: ");
                         int duration = scanner.nextInt();
@@ -71,19 +80,19 @@ public class main {
                         System.out.println("3. ASSESSMENT");
                         int catChoice = scanner.nextInt();
 
-                        String category;
+                        AppointmentCategory category;
                         switch (catChoice) {
                             case 1:
-                                category = "URGENT";
+                                category = AppointmentCategory.URGENT;
                                 break;
                             case 2:
-                                category = "FOLLOW_UP";
+                                category = AppointmentCategory.FOLLOW_UP;
                                 break;
                             case 3:
-                                category = "ASSESSMENT";
+                                category = AppointmentCategory.ASSESSMENT;
                                 break;
                             default:
-                                category = "FOLLOW_UP";
+                                category = AppointmentCategory.FOLLOW_UP;
                                 break;
                         }
 
@@ -92,11 +101,11 @@ public class main {
                         System.out.println("2. IN_PERSON");
                         int modeChoice = scanner.nextInt();
 
-                        String mode;
+                        AppointmentMode mode;
                         if (modeChoice == 1) {
-                            mode = "VIRTUAL";
+                            mode = AppointmentMode.VIRTUAL;
                         } else {
-                            mode = "IN_PERSON";
+                            mode = AppointmentMode.IN_PERSON;
                         }
 
                         System.out.println("Choose Format:");
@@ -104,16 +113,42 @@ public class main {
                         System.out.println("2. GROUP");
                         int formatChoice = scanner.nextInt();
 
-                        String format;
+                        AppointmentFormat format;
                         if (formatChoice == 1) {
-                            format = "INDIVIDUAL";
+                            format = AppointmentFormat.INDIVIDUAL;
                         } else {
-                            format = "GROUP";
+                            format = AppointmentFormat.GROUP;
                         }
 
-                        String type = category + "-" + mode + "-" + format;
+                        scanner.nextLine();
 
-                        bookingService.adminAddSlot(id, LocalDateTime.now(), duration, participants, type);
+                        String location = "";
+                        String meetingLink = "";
+
+                        if (mode == AppointmentMode.IN_PERSON) {
+                            System.out.print("Enter location: ");
+                            location = scanner.nextLine();
+                        } else {
+                            System.out.print("Enter meeting link: ");
+                            meetingLink = scanner.nextLine();
+                        }
+
+                        try {
+                            bookingService.adminAddSlot(
+                                    id,
+                                    title,
+                                    LocalDateTime.now(),
+                                    duration,
+                                    category,
+                                    mode,
+                                    format,
+                                    participants,
+                                    location,
+                                    meetingLink
+                            );
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("❌ " + e.getMessage());
+                        }
                         break;
 
                     case 2:

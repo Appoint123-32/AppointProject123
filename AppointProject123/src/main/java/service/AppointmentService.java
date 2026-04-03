@@ -8,9 +8,11 @@ import java.util.List;
 public class AppointmentService {
 
     private final AppointmentRepository repository;
+    private final AppointmentTypeRuleValidator ruleValidator;
 
     public AppointmentService(AppointmentRepository repository) {
         this.repository = repository;
+        this.ruleValidator = new AppointmentTypeRuleValidator();
     }
 
     public void addAppointment(Appointment appointment) {
@@ -18,7 +20,7 @@ public class AppointmentService {
             throw new IllegalArgumentException("Appointment ID already exists.");
         }
 
-        AppointmentRules.validate(appointment);
+        ruleValidator.validate(appointment);
         repository.addAppointment(appointment);
     }
 

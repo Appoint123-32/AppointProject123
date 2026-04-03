@@ -8,17 +8,17 @@ public class AppointmentRepository {
 
     private List<Appointment> appointments = new ArrayList<>();
 
-    // Add appointment
+    //Add appoit
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
     }
 
-    // Get all appointments
+    // Get all appoit
     public List<Appointment> getAllAppointments() {
         return appointments;
     }
 
-    // Find appointment by id
+    // Find appoit by id
     public Appointment findById(int id) {
         for (Appointment a : appointments) {
             if (a.getId() == id) {

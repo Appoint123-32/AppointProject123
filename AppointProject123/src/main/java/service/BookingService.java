@@ -1,6 +1,9 @@
 package service;
 
 import model.Appointment;
+import model.AppointmentCategory;
+import model.AppointmentFormat;
+import model.AppointmentMode;
 import repository.AppointmentRepository;
 
 import java.time.LocalDateTime;
@@ -10,28 +13,35 @@ import java.util.List;
 public class BookingService {
 
     private AppointmentRepository repository;
+    private AppointmentTypeRuleValidator ruleValidator;
 
     public BookingService(AppointmentRepository repository) {
         this.repository = repository;
+        this.ruleValidator = new AppointmentTypeRuleValidator();
     }
 
-    // 👨‍💼 Admin adds slot
-    public void adminAddSlot(int id, LocalDateTime dateTime, int duration, int participants, String type) {
+    public void adminAddSlot(int id, String title, LocalDateTime dateTime, int duration,
+                             AppointmentCategory category, AppointmentMode mode,
+                             AppointmentFormat format, int capacity,
+                             String location, String meetingLink) {
 
-        Appointment appointment = new Appointment(id, dateTime, duration, participants, type);
+        Appointment appointment = new Appointment(
+                id, title, dateTime, duration,
+                category, mode, format, capacity,
+                location, meetingLink
+        );
+
+        ruleValidator.validate(appointment);
         repository.addAppointment(appointment);
 
         System.out.println("✅ Appointment slot added successfully!");
     }
 
-    // 📋 Get all appointments
     public List<Appointment> getAllAppointments() {
         return repository.getAllAppointments();
     }
 
-    // 👀 Available slots
     public List<Appointment> viewAvailableSlots() {
-
         List<Appointment> available = new ArrayList<>();
 
         for (Appointment a : repository.getAllAppointments()) {
@@ -43,9 +53,7 @@ public class BookingService {
         return available;
     }
 
-    // 🔥 BOOK SLOT
     public void bookSlot(int id, String username) {
-
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
@@ -72,9 +80,7 @@ public class BookingService {
         System.out.println("✅ Appointment booked successfully!");
     }
 
-    // ❌ Cancel booking (user side)
     public void cancelAppointment(int id) {
-
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
@@ -93,9 +99,7 @@ public class BookingService {
         System.out.println("✅ Appointment cancelled.");
     }
 
-    // 🔥 ADMIN MODIFY
     public void adminModifyAppointment(int id, int newDuration, int newParticipants, String newType) {
-
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
@@ -110,9 +114,7 @@ public class BookingService {
         System.out.println("✅ Appointment updated successfully!");
     }
 
-    // 🔥 ADMIN DELETE
     public void adminCancelAppointment(int id) {
-
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
