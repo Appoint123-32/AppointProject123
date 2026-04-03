@@ -42,14 +42,14 @@ public class main {
 
             if (currentUsername.equals("admin")) {
 
-            	System.out.println("\n===== Admin Menu =====");
-            	System.out.println("1. Add Appointment Slot");
-            	System.out.println("2. View All Appointments");
-            	System.out.println("3. Modify Appointment");
-            	System.out.println("4. Delete Appointment");
-            	System.out.println("5. Logout");
-            	System.out.println("6. Exit");
-            	System.out.print("Choose option: ");
+                System.out.println("\n===== Admin Menu =====");
+                System.out.println("1. Add Appointment Slot");
+                System.out.println("2. View All Appointments");
+                System.out.println("3. Modify Appointment");
+                System.out.println("4. Delete Appointment");
+                System.out.println("5. Logout");
+                System.out.println("6. Exit");
+                System.out.print("Choose option: ");
 
                 int choice = scanner.nextInt();
 
@@ -65,8 +65,53 @@ public class main {
                         System.out.print("Enter number of participants: ");
                         int participants = scanner.nextInt();
 
-                        System.out.print("Enter appointment type: ");
-                        String type = scanner.next();
+                        System.out.println("Choose Category:");
+                        System.out.println("1. URGENT");
+                        System.out.println("2. FOLLOW_UP");
+                        System.out.println("3. ASSESSMENT");
+                        int catChoice = scanner.nextInt();
+
+                        String category;
+                        switch (catChoice) {
+                            case 1:
+                                category = "URGENT";
+                                break;
+                            case 2:
+                                category = "FOLLOW_UP";
+                                break;
+                            case 3:
+                                category = "ASSESSMENT";
+                                break;
+                            default:
+                                category = "FOLLOW_UP";
+                                break;
+                        }
+
+                        System.out.println("Choose Mode:");
+                        System.out.println("1. VIRTUAL");
+                        System.out.println("2. IN_PERSON");
+                        int modeChoice = scanner.nextInt();
+
+                        String mode;
+                        if (modeChoice == 1) {
+                            mode = "VIRTUAL";
+                        } else {
+                            mode = "IN_PERSON";
+                        }
+
+                        System.out.println("Choose Format:");
+                        System.out.println("1. INDIVIDUAL");
+                        System.out.println("2. GROUP");
+                        int formatChoice = scanner.nextInt();
+
+                        String format;
+                        if (formatChoice == 1) {
+                            format = "INDIVIDUAL";
+                        } else {
+                            format = "GROUP";
+                        }
+
+                        String type = category + "-" + mode + "-" + format;
 
                         bookingService.adminAddSlot(id, LocalDateTime.now(), duration, participants, type);
                         break;
@@ -96,8 +141,53 @@ public class main {
                         System.out.print("Enter new participants: ");
                         int newParticipants = scanner.nextInt();
 
-                        System.out.print("Enter new type: ");
-                        String newType = scanner.next();
+                        System.out.println("Choose New Category:");
+                        System.out.println("1. URGENT");
+                        System.out.println("2. FOLLOW_UP");
+                        System.out.println("3. ASSESSMENT");
+                        int newCatChoice = scanner.nextInt();
+
+                        String newCategory;
+                        switch (newCatChoice) {
+                            case 1:
+                                newCategory = "URGENT";
+                                break;
+                            case 2:
+                                newCategory = "FOLLOW_UP";
+                                break;
+                            case 3:
+                                newCategory = "ASSESSMENT";
+                                break;
+                            default:
+                                newCategory = "FOLLOW_UP";
+                                break;
+                        }
+
+                        System.out.println("Choose New Mode:");
+                        System.out.println("1. VIRTUAL");
+                        System.out.println("2. IN_PERSON");
+                        int newModeChoice = scanner.nextInt();
+
+                        String newMode;
+                        if (newModeChoice == 1) {
+                            newMode = "VIRTUAL";
+                        } else {
+                            newMode = "IN_PERSON";
+                        }
+
+                        System.out.println("Choose New Format:");
+                        System.out.println("1. INDIVIDUAL");
+                        System.out.println("2. GROUP");
+                        int newFormatChoice = scanner.nextInt();
+
+                        String newFormat;
+                        if (newFormatChoice == 1) {
+                            newFormat = "INDIVIDUAL";
+                        } else {
+                            newFormat = "GROUP";
+                        }
+
+                        String newType = newCategory + "-" + newMode + "-" + newFormat;
 
                         bookingService.adminModifyAppointment(modId, newDuration, newParticipants, newType);
                         break;
@@ -118,7 +208,6 @@ public class main {
                         System.out.println("Exiting system...");
                         scanner.close();
                         return;
-
 
                     default:
                         System.out.println("Invalid choice.");
