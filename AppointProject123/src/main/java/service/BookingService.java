@@ -14,21 +14,34 @@ public class BookingService {
 
     private AppointmentRepository repository;
     private AppointmentTypeRuleValidator ruleValidator;
+    private TimeProvider timeProvider;
 
     public BookingService(AppointmentRepository repository) {
-        this.repository = repository;
-        this.ruleValidator = new AppointmentTypeRuleValidator();
+        this(repository, new SystemTimeProvider());
     }
 
-    public void adminAddSlot(int id, String title, LocalDateTime dateTime, int duration,
+    public BookingService(AppointmentRepository repository, TimeProvider timeProvider) {
+        this.repository = repository;
+        this.ruleValidator = new AppointmentTypeRuleValidator();
+        this.timeProvider = timeProvider;
+    }
+
+    public void adminAddSlot(int id, String title, int duration,
                              AppointmentCategory category, AppointmentMode mode,
                              AppointmentFormat format, int capacity,
                              String location, String meetingLink) {
 
         Appointment appointment = new Appointment(
-                id, title, dateTime, duration,
-                category, mode, format, capacity,
-                location, meetingLink
+                id,
+                title,
+                timeProvider.now(),
+                duration,
+                category,
+                mode,
+                format,
+                capacity,
+                location,
+                meetingLink
         );
 
         ruleValidator.validate(appointment);

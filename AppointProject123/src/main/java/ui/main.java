@@ -1,6 +1,5 @@
 package ui;
 
-import java.time.LocalDateTime;
 import model.AppointmentCategory;
 import model.AppointmentFormat;
 import model.AppointmentMode;
@@ -58,7 +57,6 @@ public class main {
 
                 switch (choice) {
 
-                   
                     case 1:
                         System.out.print("Enter slot ID: ");
                         int id = scanner.nextInt();
@@ -137,7 +135,6 @@ public class main {
                             bookingService.adminAddSlot(
                                     id,
                                     title,
-                                    LocalDateTime.now(),
                                     duration,
                                     category,
                                     mode,
