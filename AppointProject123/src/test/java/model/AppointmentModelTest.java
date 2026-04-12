@@ -80,4 +80,22 @@ class AppointmentModelTest {
         assertEquals("FULL", appFull.getStatus());
         assertTrue(appFull.isFull());
     }
+    @Test
+    void testModel_NullAndBlankBranches() {
+        Appointment app = new Appointment(1, java.time.LocalDateTime.now(), 30, 1, "TYPE");
+        
+        Appointment appNullCat = new Appointment(2, "T", java.time.LocalDateTime.now(), 30, null, null, null, 1, "", "");
+        assertEquals("", appNullCat.getType());
+
+        app.setParticipants(5);
+        assertEquals(AppointmentFormat.GROUP, app.getFormat());
+        app.setParticipants(1);
+        assertEquals(AppointmentFormat.INDIVIDUAL, app.getFormat());
+
+        app.setLocation(null);
+        app.setMeetingLink(null);
+        String out = app.toString();
+        assertTrue(out.contains("Location: -"));
+        assertTrue(out.contains("Meeting Link: -"));
+    }
 }

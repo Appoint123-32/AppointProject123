@@ -101,5 +101,20 @@ class MainUITest {
             System.setIn(System.in);
         }
     }
+    @Test
+    void testMain_SubMenuDefaultBranches() {
+   
+        String script = "admin\n1234\n" + 
+                        "1\n111\nT\n30\n1\n9\n9\n9\nDefaultLoc\n" + 
+                        "6\n";
+
+        InputStream in = new ByteArrayInputStream(script.getBytes());
+        System.setIn(in);
+
+        try {
+            main.main(new String[]{});
+        } catch (Exception e) {}
+        finally { System.setIn(System.in); }
+    }
     
 }

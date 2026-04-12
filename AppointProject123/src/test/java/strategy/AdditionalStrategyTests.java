@@ -42,4 +42,22 @@ class AdditionalStrategyTests {
         app.setParticipants(10); // Too many for a group (Limit is 5)
         assertFalse(grpRule.isValid(app));
     }
+    @Test
+    void testRules_CategoryMismatchBranches() {
+        Appointment urgentApp = new Appointment(1, java.time.LocalDateTime.now(), 20, 1, "URGENT");
+        urgentApp.setCategory(AppointmentCategory.URGENT);
+
+        assertTrue(new FollowUpRule().isValid(urgentApp));
+        assertTrue(new AssessmentRule().isValid(urgentApp));
+        
+        urgentApp.setMode(AppointmentMode.IN_PERSON);
+        assertTrue(new VirtualRule().isValid(urgentApp));
+        
+        urgentApp.setMode(AppointmentMode.VIRTUAL);
+        assertTrue(new InPersonRule().isValid(urgentApp));
+        
+    
+        urgentApp.setFormat(AppointmentFormat.INDIVIDUAL);
+        assertTrue(new GroupRule().isValid(urgentApp));
+    }
 }

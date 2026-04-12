@@ -80,4 +80,12 @@ class BookingServiceLogicTest {
         bookingService.adminModifyAppointment(999, 30, 1, "T");
       
     }
+    @Test
+    void testService_ModifyAndCancel_NonExistentBranches() {
+        bookingService.adminModifyAppointment(999, 30, 1, "TYPE");
+        
+        bookingService.adminCancelAppointment(999);
+  
+        bookingService.bookSlot(999, "user");
+    }
 }
