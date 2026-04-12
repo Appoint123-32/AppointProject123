@@ -79,4 +79,25 @@ public class AppointmentRulesTest {
 
         assertEquals("Follow-up appointment cannot exceed 30 minutes.", exception.getMessage());
     }
+    @Test
+    void testAppointmentRulesCategoryBranches() {
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+
+       
+        Appointment urgent = new Appointment(1, "Urgent", now, 30, AppointmentCategory.URGENT, 
+                                            AppointmentMode.IN_PERSON, AppointmentFormat.GROUP, 3, "Room", "");
+        assertThrows(IllegalArgumentException.class, () -> AppointmentRules.validate(urgent));
+
+        Appointment assessment = new Appointment(2, "Assess", now, 20, AppointmentCategory.ASSESSMENT, 
+                                                AppointmentMode.IN_PERSON, AppointmentFormat.INDIVIDUAL, 1, "Room", "");
+        assertThrows(IllegalArgumentException.class, () -> AppointmentRules.validate(assessment));
+
+        Appointment followup = new Appointment(3, "Follow", now, 45, AppointmentCategory.FOLLOW_UP, 
+                                              AppointmentMode.IN_PERSON, AppointmentFormat.INDIVIDUAL, 1, "Room", "");
+        assertThrows(IllegalArgumentException.class, () -> AppointmentRules.validate(followup));
+
+        Appointment virtual = new Appointment(4, "Virtual", now, 30, AppointmentCategory.FOLLOW_UP, 
+                                             AppointmentMode.VIRTUAL, AppointmentFormat.INDIVIDUAL, 1, "", "");
+        assertThrows(IllegalArgumentException.class, () -> AppointmentRules.validate(virtual));
+    }
 }

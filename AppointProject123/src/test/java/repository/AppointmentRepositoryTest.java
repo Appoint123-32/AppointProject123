@@ -61,4 +61,24 @@ class AppointmentRepositoryTest {
 
         assertEquals(1, repository.getAvailableAppointments().size());
     }
+    @Test
+    void testFindById_NotFoundBranch() {
+        AppointmentRepository repo = new AppointmentRepository();
+        assertNull(repo.findById(9999)); 
+    }
+
+    @Test
+    void testGetAvailableAppointments_MixedBranch() {
+        AppointmentRepository repo = new AppointmentRepository();
+        
+        Appointment full = new Appointment(1, java.time.LocalDateTime.now(), 30, 1, "TYPE");
+        full.addBooking("User1");
+        repo.addAppointment(full);
+        
+        Appointment avail = new Appointment(2, java.time.LocalDateTime.now(), 30, 2, "TYPE");
+        repo.addAppointment(avail);
+        
+        assertEquals(1, repo.getAvailableAppointments().size());
+        assertEquals(2, repo.getAvailableAppointments().get(0).getId());
+    }
 }

@@ -34,29 +34,25 @@ class AppointmentModelTest {
     }
     @Test
     void testToString_Branches() {
-        // We need a dummy date for the constructor
         LocalDateTime now = LocalDateTime.now();
         
-        // Branch 1: Test when Location and Meeting Link are empty/null
         Appointment app1 = new Appointment(1, now, 30, 1, "TYPE");
         app1.setLocation(""); // empty
         app1.setMeetingLink(null); // null
         
         String output1 = app1.toString();
-        // Check if the specific labels show the placeholder "-"
         assertTrue(output1.contains("Location: -"));
         assertTrue(output1.contains("Meeting Link: -"));
 
-        // Branch 2: Test when Location and Meeting Link are actually provided
         app1.setLocation("Room 101");
         app1.setMeetingLink("https://zoom.us/j/123");
         
         String output2 = app1.toString();
-        // Check that the specific labels do NOT show the "-" placeholder anymore
+     
         assertFalse(output2.contains("Location: -"));
         assertFalse(output2.contains("Meeting Link: -"));
         
-        // Verify the actual values are there
+        
         assertTrue(output2.contains("Location: Room 101"));
         assertTrue(output2.contains("Meeting Link: https://zoom.us/j/123"));
     }
@@ -65,5 +61,23 @@ class AppointmentModelTest {
     void testConstructors_Branches() {
         Appointment app = new Appointment(101, LocalDateTime.now(), 60, 1, "TYPE");
         assertEquals("Appointment 101", app.getTitle());
+    }
+    @Test
+    void testConstructorsAndSetters() {
+        Appointment app1 = new Appointment(100, java.time.LocalDateTime.now(), 30, 1, "TYPE");
+        assertEquals("Appointment 100", app1.getTitle());
+
+        Appointment app2 = new Appointment(101, "Title", java.time.LocalDateTime.now(), 45, 2, "TYPE");
+        assertEquals(AppointmentFormat.GROUP, app2.getFormat());
+
+        app1.setParticipants(1);
+        assertEquals(AppointmentFormat.INDIVIDUAL, app1.getFormat());
+        app1.setParticipants(5);
+        assertEquals(AppointmentFormat.GROUP, app1.getFormat());
+
+        Appointment appFull = new Appointment(200, java.time.LocalDateTime.now(), 30, 1, "TYPE");
+        appFull.addBooking("User1"); 
+        assertEquals("FULL", appFull.getStatus());
+        assertTrue(appFull.isFull());
     }
 }
