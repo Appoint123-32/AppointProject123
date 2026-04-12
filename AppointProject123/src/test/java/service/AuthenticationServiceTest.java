@@ -30,6 +30,22 @@ class AuthenticationServiceTest {
         auth.logout();
 
         assertFalse(auth.isLoggedIn());
+        
+    }
+    @Test
+    void testLogout_ResetsState() {
+        AuthenticationService auth = new AuthenticationService();
+        auth.login("admin", "1234");
+        assertTrue(auth.isLoggedIn());
+        
+        auth.logout();
+        assertFalse(auth.isLoggedIn());
+    }
+
+    @Test
+    void testLogin_WithInvalidUser_ReturnsFalse() {
+        AuthenticationService auth = new AuthenticationService();
+        assertFalse(auth.login("nonexistent", "0000"));
     }
 }
 
