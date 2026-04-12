@@ -27,8 +27,25 @@ class AppointmentModelTest {
     @Test
     void testAddBookingWhenFullThrows() {
         Appointment app = new Appointment(1, LocalDateTime.now(), 30, 1, "TYPE");
-        app.addBooking("user1"); // Full now
+        app.addBooking("user1"); 
         
         assertThrows(IllegalStateException.class, () -> app.addBooking("user2"));
+    }
+    @Test
+    void testToString_Branches() {
+        Appointment app1 = new Appointment(1, LocalDateTime.now(), 30, 1, "TYPE");
+        app1.setLocation("");
+        app1.setMeetingLink(null);
+        assertTrue(app1.toString().contains("-")); 
+
+        app1.setLocation("Room 1");
+        app1.setMeetingLink("http://zoom");
+        assertFalse(app1.toString().contains("-")); 
+    }
+
+    @Test
+    void testConstructors_Branches() {
+        Appointment app = new Appointment(101, LocalDateTime.now(), 60, 1, "TYPE");
+        assertEquals("Appointment 101", app.getTitle());
     }
 }

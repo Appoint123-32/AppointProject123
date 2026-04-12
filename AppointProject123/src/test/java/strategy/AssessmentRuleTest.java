@@ -52,4 +52,12 @@ class AssessmentRuleTest {
 
         assertTrue(rule.isValid(appointment));
     }
+    @Test
+    void testAssessmentRule_WhenNotAssessment_ReturnsTrue() {
+        AssessmentRule rule = new AssessmentRule();
+        Appointment app = new Appointment(1, LocalDateTime.now(), 30, 1, "FOLLOW_UP");
+        app.setCategory(AppointmentCategory.FOLLOW_UP); 
+        
+        assertTrue(rule.isValid(app)); 
+    }
 }

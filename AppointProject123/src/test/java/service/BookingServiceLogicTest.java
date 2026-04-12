@@ -16,7 +16,6 @@ class BookingServiceLogicTest {
         repository = new AppointmentRepository();
         bookingService = new BookingService(repository);
         
-        // Add a test appointment: ID 1, Capacity 1 (Individual)
         Appointment app = new Appointment(1, "Test", LocalDateTime.now(), 30, 
                                         AppointmentCategory.FOLLOW_UP, AppointmentMode.IN_PERSON, 
                                         AppointmentFormat.INDIVIDUAL, 1, "Office", "");
@@ -33,8 +32,8 @@ class BookingServiceLogicTest {
 
     @Test
     void testBookSlot_WhenFull_Fails() {
-        bookingService.bookSlot(1, "user1"); // Now it's full
-        bookingService.bookSlot(1, "user2"); // Should not add user2
+        bookingService.bookSlot(1, "user1"); 
+        bookingService.bookSlot(1, "user2"); 
         assertEquals(1, repository.findById(1).getBookedUsers().size());
     }
 
@@ -62,5 +61,23 @@ class BookingServiceLogicTest {
         
         bookingService.adminCancelAppointment(1);
         assertNull(repository.findById(1));
+    }
+    @Test
+    void testCancelAppointment_NoBookings_Branch() {
+    
+        bookingService.cancelAppointment(1); 
+     
+    }
+
+    @Test
+    void testBookSlot_NonExistentId_Branch() {
+        bookingService.bookSlot(999, "anyUser"); 
+      
+    }
+
+    @Test
+    void testAdminModify_NonExistentId_Branch() {
+        bookingService.adminModifyAppointment(999, 30, 1, "T");
+      
     }
 }
