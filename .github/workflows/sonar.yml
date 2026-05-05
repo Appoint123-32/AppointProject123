@@ -36,8 +36,10 @@ jobs:
 
       - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        # This tells Maven to go into your subfolder where the pom.xml is
+        working-directory: AppointProject123  
         run: >
           mvn -B jacoco:prepare-agent verify 
           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
