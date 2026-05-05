@@ -45,4 +45,5 @@ jobs:
           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
           jacoco:report
           -Dsonar.projectKey=TuqaGh0_AppointProject123
+          -Dsonar.organization=tuqagh0
           -Dsonar.coverage.exclusions=**/main.java
