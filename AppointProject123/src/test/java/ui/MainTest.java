@@ -1,3 +1,11 @@
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import org.junit.jupiter.api.Test;
+public class MainTest {
 @Test
     void testMain_LoginThenExit() {
         String simulatedInput = String.join(System.lineSeparator(),
