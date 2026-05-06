@@ -1,18 +1,4 @@
-package ui;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-
-import org.junit.jupiter.api.Test;
-
-public class MainTest {
-
-    @Test
+@Test
     void testMain_LoginThenExit() {
         String simulatedInput = String.join(System.lineSeparator(),
                 "admin",
@@ -27,11 +13,13 @@ public class MainTest {
                 new ByteArrayInputStream(simulatedInput.getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream testOut = new ByteArrayOutputStream();
 
-        try {
+      
+        try (PrintStream ps = new PrintStream(testOut)) {
             System.setIn(testIn);
-            System.setOut(new PrintStream(testOut));
+            System.setOut(ps);
 
-            main.main(new String[]{});
+           
+            Main.main(new String[]{}); 
 
             String output = testOut.toString();
 
@@ -39,8 +27,8 @@ public class MainTest {
             assertTrue(output.contains("Exiting system..."));
 
         } finally {
+          
             System.setIn(originalIn);
             System.setOut(originalOut);
         }
     }
-}
