@@ -66,18 +66,22 @@ class BookingServiceLogicTest {
     void testCancelAppointment_NoBookings_Branch() {
     
         bookingService.cancelAppointment(1); 
+       assertTrue(repository.findById(1).getBookedUsers().isEmpty(), 
+                  "List should remain empty when canceling with no bookings");
      
     }
 
     @Test
     void testBookSlot_NonExistentId_Branch() {
         bookingService.bookSlot(999, "anyUser"); 
+        assertNull(repository.findById(999), "Should be null for a non-existent ID");
       
     }
 
     @Test
     void testAdminModify_NonExistentId_Branch() {
         bookingService.adminModifyAppointment(999, 30, 1, "T");
+          assertNull(repository.findById(999));
       
     }
     @Test
@@ -87,5 +91,6 @@ class BookingServiceLogicTest {
         bookingService.adminCancelAppointment(999);
   
         bookingService.bookSlot(999, "user");
+        assertNull(repository.findById(999));
     }
 }
