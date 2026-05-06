@@ -14,7 +14,7 @@ import jakarta.mail.internet.MimeMessage;
 public class EmailNotificationService implements Observer {
 
     private final String senderEmail = "s12323530@stu.najah.edu";
-    private final String appPassword = "jwlh gszg rkgl fbxe";
+    private final String appPassword = System.getenv("SECRET");
     private final String receiverEmail = "s12323530@stu.najah.edu";
 
     @Override
