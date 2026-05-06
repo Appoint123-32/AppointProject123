@@ -100,7 +100,7 @@ public class BookingService {
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-           LOGGER.info();
+           LOGGER.info(APPOINTMENT_NOT_FOUND);
             return;
         }
 
@@ -140,6 +140,6 @@ public class BookingService {
 
         repository.removeAppointment(appointment);
 
-        System.out.println("✅ Appointment deleted by admin.");
+       LOGGER.info("✅ Appointment deleted by admin.");
     }
 }
