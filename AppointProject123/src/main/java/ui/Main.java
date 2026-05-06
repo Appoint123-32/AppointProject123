@@ -11,7 +11,7 @@ import repository.AppointmentRepository;
 import service.AuthenticationService;
 import service.BookingService;
 
-public class main {
+public class Main {
 
     public static void main(String[] args) {
 
