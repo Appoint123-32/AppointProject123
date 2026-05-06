@@ -15,7 +15,7 @@ public class BookingService {
     private AppointmentRepository repository;
     private AppointmentTypeRuleValidator ruleValidator;
     private TimeProvider timeProvider;
-    private static final String Appointment_not_found =  "❌ Appointment not found." ; 
+    private static final String APPOINTMENT_NOT_FOUND =  "❌ Appointment not found." ; 
 
     public BookingService(AppointmentRepository repository) {
         this(repository, new SystemTimeProvider());
