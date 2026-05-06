@@ -15,6 +15,7 @@ public class BookingService {
     private AppointmentRepository repository;
     private AppointmentTypeRuleValidator ruleValidator;
     private TimeProvider timeProvider;
+    private static final String Appointment_not_found =  "❌ Appointment not found." ; 
 
     public BookingService(AppointmentRepository repository) {
         this(repository, new SystemTimeProvider());
@@ -70,7 +71,7 @@ public class BookingService {
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-            System.out.println("❌ Appointment not found.");
+            System.out.println(Appointment_not_found);
             return;
         }
 
@@ -97,7 +98,7 @@ public class BookingService {
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-            System.out.println("❌ Appointment not found.");
+            System.out.println();
             return;
         }
 
@@ -116,7 +117,7 @@ public class BookingService {
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-            System.out.println("❌ Appointment not found.");
+            System.out.println(Appointment_not_found);
             return;
         }
 
@@ -131,7 +132,7 @@ public class BookingService {
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-            System.out.println("❌ Appointment not found.");
+            System.out.println(Appointment_not_found);
             return;
         }
 
