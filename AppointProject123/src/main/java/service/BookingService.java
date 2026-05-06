@@ -71,7 +71,7 @@ public class BookingService {
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-            System.out.println(Appointment_not_found);
+            System.out.println(APPOINTMENT_NOT_FOUND);
             return;
         }
 
@@ -117,7 +117,7 @@ public class BookingService {
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-            System.out.println(Appointment_not_found);
+            System.out.println(APPOINTMENT_NOT_FOUND);
             return;
         }
 
@@ -132,7 +132,7 @@ public class BookingService {
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-            System.out.println(Appointment_not_found);
+            System.out.println(APPOINTMENT_NOT_FOUND);
             return;
         }
 
