@@ -6,6 +6,7 @@ import model.AppointmentFormat;
 import model.AppointmentMode;
 import repository.AppointmentRepository;
 
+import java.util.logging.Logger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class BookingService {
     private AppointmentTypeRuleValidator ruleValidator;
     private TimeProvider timeProvider;
     private static final String APPOINTMENT_NOT_FOUND =  "❌ Appointment not found." ; 
+    private static final Logger LOGGER = Logger.getLogger(BookingService.class.getName());
 
     public BookingService(AppointmentRepository repository) {
         this(repository, new SystemTimeProvider());
@@ -48,7 +50,7 @@ public class BookingService {
         ruleValidator.validate(appointment);
         repository.addAppointment(appointment);
 
-        System.out.println("✅ Appointment slot added successfully!");
+        LOGGER.info("✅ Appointment slot added successfully!");
     }
 
     public List<Appointment> getAllAppointments() {
@@ -71,17 +73,17 @@ public class BookingService {
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-            System.out.println(APPOINTMENT_NOT_FOUND);
+            LOGGER.info(APPOINTMENT_NOT_FOUND);
             return;
         }
 
         if (appointment.getBookedUsers().size() >= appointment.getParticipants()) {
-            System.out.println("❌ No available slots (appointment is full).");
+            LOGGER.info("❌ No available slots (appointment is full).");
             return;
         }
 
         if (appointment.getBookedUsers().contains(username)) {
-            System.out.println("❌ You already booked this appointment.");
+            LOGGER.info("❌ You already booked this appointment.");
             return;
         }
 
@@ -91,33 +93,33 @@ public class BookingService {
             appointment.setStatus("FULL");
         }
 
-        System.out.println("✅ Appointment booked successfully!");
+       LOGGER.info("✅ Appointment booked successfully!");
     }
 
     public void cancelAppointment(int id) {
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-            System.out.println();
+           LOGGER.info();
             return;
         }
 
         if (appointment.getBookedUsers().isEmpty()) {
-            System.out.println("❌ No bookings to cancel.");
+            LOGGER.info("❌ No bookings to cancel.");
             return;
         }
 
         appointment.getBookedUsers().remove(appointment.getBookedUsers().size() - 1);
         appointment.setStatus("AVAILABLE");
 
-        System.out.println("✅ Appointment cancelled.");
+        LOGGER.info("✅ Appointment cancelled.");
     }
 
     public void adminModifyAppointment(int id, int newDuration, int newParticipants, String newType) {
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-            System.out.println(APPOINTMENT_NOT_FOUND);
+            LOGGER.info(APPOINTMENT_NOT_FOUND);
             return;
         }
 
@@ -125,14 +127,14 @@ public class BookingService {
         appointment.setParticipants(newParticipants);
         appointment.setType(newType);
 
-        System.out.println("✅ Appointment updated successfully!");
+        LOGGER.info("✅ Appointment updated successfully!");
     }
 
     public void adminCancelAppointment(int id) {
         Appointment appointment = repository.findById(id);
 
         if (appointment == null) {
-            System.out.println(APPOINTMENT_NOT_FOUND);
+           LOGGER.info(APPOINTMENT_NOT_FOUND);
             return;
         }
 
