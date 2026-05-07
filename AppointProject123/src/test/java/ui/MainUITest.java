@@ -15,7 +15,7 @@ class MainUITest {
 
     
         try {
-            main.main(new String[]{});
+            Main.main(new String[]{});
         } catch (NoSuchElementException e) {
           
         } finally {
@@ -32,7 +32,7 @@ class MainUITest {
         System.setIn(in);
 
         try {
-            main.main(new String[]{});
+            Main.main(new String[]{});
         } catch (NoSuchElementException e) {
         } finally {
             System.setIn(System.in);
@@ -46,7 +46,7 @@ class MainUITest {
         System.setIn(in);
 
         try {
-            main.main(new String[]{});
+            Main.main(new String[]{});
         } catch (Exception e) {}
     }
     @Test
@@ -61,7 +61,7 @@ class MainUITest {
         System.setIn(in);
 
         try {
-            main.main(new String[]{});
+            Main.main(new String[]{});
         } catch (Exception e) {
         } finally {
             System.setIn(System.in);
@@ -81,7 +81,7 @@ class MainUITest {
         System.setIn(in);
 
         try {
-            main.main(new String[]{});
+            Main.main(new String[]{});
         } catch (Exception e) {
         } finally {
             System.setIn(System.in);
@@ -95,7 +95,7 @@ class MainUITest {
         System.setIn(in);
 
         try {
-            main.main(new String[]{});
+            Main.main(new String[]{});
         } catch (Exception e) {
         } finally {
             System.setIn(System.in);
@@ -112,7 +112,7 @@ class MainUITest {
         System.setIn(in);
 
         try {
-            main.main(new String[]{});
+            Main.main(new String[]{});
         } catch (Exception e) {}
         finally { System.setIn(System.in); }
     }
