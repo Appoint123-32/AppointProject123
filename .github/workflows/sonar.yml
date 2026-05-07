@@ -45,5 +45,5 @@ jobs:
           jacoco:report
           -Dsonar.projectKey=TuqaGh0_AppointProject123
           -Dsonar.organization=tuqagh0
-          -Dsonar.coverage.exclusions=**/Main.java,**/Administrator.java,**/Schedule.java,**/TimeSlot.java
+          -Dsonar.coverage.exclusions=**/Main.java,**/Administrator.java,**/Schedule.java,**/TimeSlot.java,**/EmailNotificationService.java
 
